@@ -1,21 +1,13 @@
 const http = require('http');
 const express = require('express');
-const questions = require('./questions').questions;
 const config = require('./config').config;
-const Routes = require('./REST/routes');
+const Routes = require('./routes');
 const bodyParser = require('body-parser');
 
 const app = express();
 
-app.use(express.static(__dirname + '/public'));
-
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(bodyParser.json({limit: '2048kb'}));
-
-app.get('/api/questions', (request, response) => {
-   response.send(questions);
-   console.log("udalo sie");
-});
+app.use(express.json()) // for parsing application/json
+app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
 let routes = new Routes();
 routes.routes(app);
