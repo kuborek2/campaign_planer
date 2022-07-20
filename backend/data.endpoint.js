@@ -11,6 +11,58 @@ let removeCampaign = (arr, id) => {
     });
 }
 
+let checkMandatoryCampaignParams = (obj) => {
+    let mandatoryParams = {
+        company_id: false,
+        product_id: false,
+        campaign_name: false,
+        keywords: false,
+        bid_amount: false,
+        status: false,
+        town:  false,
+        radius: false
+    };
+
+    for (const [objKey, objValue] of Object.entries(obj)) {
+        for (const [manKey, manValue] of Object.entries(mandatoryParams)) {
+            if( objKey === manKey && !!objValue ){
+                if( objKey === "keywords" ){
+                    if ( objValue.length > 0 )
+                        mandatoryParams.keywords = true 
+                } else if ( objKey === "bid_amount" ){
+                    if( objValue > 10000 )
+                        mandatoryParams.bid_amount = true
+                } else {
+                    mandatoryParams[objKey] = true;
+                }
+            }
+        }
+    }
+
+    if( Object.values(mandatoryParams).
+        filter((elem) => elem === false)
+        .length > 0
+        )
+        return false
+    else
+        return true
+}
+
+let findFirstEmptyCompaignId = () => {
+    let id = 1;
+    while(id){
+        let isFree = true;
+        campaigns.filter((elem) => {
+            if(elem.campaign_id === id)
+                isFree = false;
+        })
+        if( isFree )
+            return id
+        else
+            id++
+    }
+}
+
 module.exports = function (){
     this.dataEndpoint = (router) => {
         //** Endpoint for GET request for comapnies */
@@ -50,11 +102,16 @@ module.exports = function (){
                 response.status(404).end();
         });
 
-        router.post('/api/posts', async (request, response, next) => {
-            posts.push(request.body.newPost);
-            
-            response.status(200).send({post: posts[posts.length - 1]});
-            if ( response.status(404) ) console.log("404 status for post method!");
+        router.post('/api/campaign', async (request, response, next) => {
+            let newCampaign = request.body;
+            if( checkMandatoryCampaignParams(newCampaign) ){
+                newCampaign["campaign_id"] = findFirstEmptyCompaignId();
+                campaigns.push(newCampaign);
+                console.log("New campaign added with campaign_id: "+newCampaign.campaign_id);
+                response.status(200).send({campaign: newCampaign});
+            } else {
+                response.status(404).send("Data was incorrect");
+            }
         });
 
         //** Endpoint for DELETE request for campaigns */

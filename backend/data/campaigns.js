@@ -24,7 +24,7 @@ const campaigns = [
             "limited offer"
         ],
         bid_amount: 25000,
-        status: true,
+        status: false,
         town: "Tarnow",
         radius: "10"
     },
