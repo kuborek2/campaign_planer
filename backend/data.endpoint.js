@@ -102,6 +102,7 @@ module.exports = function (){
                 response.status(404).end();
         });
 
+        //** Endpoint for POST request for campaigns */
         router.post('/api/campaign', async (request, response, next) => {
             let newCampaign = request.body;
             if( checkMandatoryCampaignParams(newCampaign) ){
@@ -129,14 +130,17 @@ module.exports = function (){
                 res.status(404).end();
           })
 
-        router.put('/api/post/:id', async (request, response, next) => {
-            console.log("modyfing post with this id: "+(request.params.id-1));
-            console.log("current post body: "+request.body.newPost);
-
-            posts[request.params.id-1] = request.body.newPost;
-
-            response.status(200).send(request.body.newPost);
-            if ( response.status(404) ) console.log("404 status for post method!");
+        //** Endpoint for PUT request for campaigns */
+        router.put('/api/campaign/:id', async (request, response, next) => {
+            let newCampaign = request.body;
+            if( checkMandatoryCampaignParams(newCampaign) ){
+                newCampaign["campaign_id"] = request.params.id;
+                campaigns[request.params.id-1] = newCampaign;
+                console.log("Campaign modified with campaign_id: "+newCampaign.campaign_id);
+                response.status(200).send({campaign: newCampaign});
+            } else {
+                response.status(404).send("Data was incorrect");
+            }
         });
     };
 }
