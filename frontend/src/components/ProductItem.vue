@@ -1,5 +1,10 @@
 <script setup>
     import ArrowIcon from '@carbon/icons-vue/es/arrow--right/32.js'
+    import { useCurrentProductStore } from "../stores/currentProductStore.js"
+    const productStore = useCurrentProductStore();
+        defineProps({
+        productId: Number
+    })
 </script>
 
 <template>
@@ -10,7 +15,7 @@
             </h2>
         </div>
         <div class="button">
-            <ArrowIcon class="icon"/>
+            <ArrowIcon @click="productStore.change(productId)" class="icon"/>
         </div>
     </div>
 </template>
