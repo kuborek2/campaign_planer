@@ -1,5 +1,6 @@
 <script setup>
     import CompanyItem from "./CompanyItem.vue";
+    import ProductItem from "./ProductItem.vue";
     const companies = 
     [
         {
@@ -45,18 +46,22 @@
 
 <template>
     <div class="container">
-        <div class="companies">
-            <CompanyItem>
+        <div class="companies" >
+            <CompanyItem v-for="company in companies" v-bind:key="company.company_id">
                 <template #name>
-                    Hegemeony
+                    {{ company.name }}
                 </template>
                 <template #budget>
-                    150000
+                    {{ company.fund_balance }}
                 </template>
             </CompanyItem>
         </div>
-        <div class="products">
-            gfdggdfgd
+        <div class="products" v-for="product in companies.products_list" v-bind:key="product.product_id">
+            <ProductItem>
+                <template #name>
+                    {{ product.name }}
+                </template>
+            </ProductItem>
         </div>
         <div class="campaigns">
             gfd
@@ -77,6 +82,9 @@
 
 .companies {
     grid-area: companies;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
 .products {

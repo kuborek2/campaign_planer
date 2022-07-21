@@ -8,11 +8,6 @@
             <h2>
                 <slot name="name"></slot>
             </h2>
-            <div class="details">
-                <h4>
-                    Total Budget: <slot name="budget"></slot> $
-                </h4>
-            </div>
         </div>
         <div class="button">
             <ArrowIcon class="icon"/>
@@ -29,9 +24,10 @@
     width: calc(75% - 25px);
     height: 75px;
     margin: 10px 0px 10px 25px;
-    display: gird;
-    grid-template-columns: auto;
-    grid-template-rows: 1fr 1fr;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
     padding: 5px;
     border: 1px solid #E0E0E0;
 }
