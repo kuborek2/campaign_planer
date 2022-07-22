@@ -1,5 +1,23 @@
 <script setup>
     import ArrowIcon from '@carbon/icons-vue/es/arrow--right/32.js'
+    import { useCurrentCampaignStore } from "../stores/currentCampaignStore.js"
+    import { useCampaignsStore } from "../stores/campaignsStore.js"
+    import router from '@/router'
+
+    const campaignStore = useCurrentCampaignStore();
+    const campaignsStore = useCampaignsStore();
+
+    defineProps({
+        campaignId: {
+            type: Number,
+            default: -1
+        }
+    })
+
+    const moveToCampaignDetails = (value) => {
+        campaignStore.change(value)
+        router.push({ path: '/campaign' })
+    }
 </script>
 
 <template>
@@ -9,7 +27,7 @@
                 <slot name="name"></slot>
             </h2>
             <div class="details">
-                <button>About</button>
+                <button @click="moveToCampaignDetails(campaignId)">About</button>
             </div>
         </div>
     </div>
@@ -31,5 +49,7 @@
     border: 1px solid #E0E0E0;
     background-color: #7FD1AE;
 }
+
+
 
 </style>

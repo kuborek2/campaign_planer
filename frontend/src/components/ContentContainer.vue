@@ -2,97 +2,77 @@
     import CompanyItem from "./CompanyItem.vue";
     import ProductItem from "./ProductItem.vue";
     import CampaignItem from "./CampaignItem.vue";
+    import { storeToRefs } from "pinia";
     import { useCurrentCompanyStore } from "../stores/currentCompanyStore.js"
     import { useCurrentProductStore } from "../stores/currentProductStore.js"
-import AddCampaignItem from "./AddCampaignItem.vue";
+    import { useCompaniesStore } from "../stores/companiesStore.js"
+    import { useCampaignsStore } from "../stores/campaignsStore.js"
+    import AddCampaignItem from "./AddCampaignItem.vue";
+    import { inject, onMounted } from 'vue'
+    import axios from 'axios'
+
+    // Stores
     const companyStore = useCurrentCompanyStore();
     const productStore = useCurrentProductStore();
-    const companies = 
-    [
-        {
-            company_id: 1,
-            name: 'Domain of Man',
-            fund_balance: 100000,
-            products_list: [
-                {
-                    product_id: 1,
-                    name: 'gate'
-                },
-                {
-                    product_id: 2,
-                    name: 'exploration ship'
-                },
-                {
-                    product_id: 3,
-                    name: 'artifacts'
+    const companiesStore = useCompaniesStore();
+    const campaignsStore = useCampaignsStore();
+    const apiGetCompanies = "http://localhost:3000/api/companies"
+    const apiGetCampaigns = "http://localhost:3000/api/campaigns"
+    const { companies } = storeToRefs(companiesStore);
+    const { campaigns } = storeToRefs(campaignsStore);
+
+    onMounted(() => {
+        requestCompanies();
+        requestCampaigns();
+    })
+
+    //** Data requests */
+    const requestCompanies = () => {
+        axios
+            .get(apiGetCompanies)
+            .then((response) => {
+                companiesStore.change(response.data.companies)
+            })
+            .catch(function (error) {
+                if (error.response) {
+                    // The request was made and the server responded with a status code
+                    // that falls out of the range of 2xx
+                    console.log(error.response.data);
+                    console.log(error.response.status);
+                    console.log(error.response.headers);
+                } else if (error.request) {
+                    // The request was made but no response was received
+                    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                    // http.ClientRequest in node.js
+                    console.log(error.request);
+                } else {
+                    // Something happened in setting up the request that triggered an Error
+                    console.log('Error', error.message);
                 }
-            ]
-        },
-        {
-            company_id: 2,
-            name: 'Hegemony',
-            fund_balance: 200000,
-            products_list: [
-                {
-                    product_id: 1,
-                    name: 'toothbrash'
-                },
-                {
-                    product_id: 2,
-                    name: 'ore'
-                },
-                {
-                    product_id: 3,
-                    name: 'food'
+                console.log(error.config);
+            })
+    }
+
+    const requestCampaigns = () => {
+        axios
+            .get(apiGetCampaigns)
+            .then((response) => {
+                campaignsStore.change(response.data.campaigns)
+            })
+            .catch(function (error) {
+                if (error.response) {
+                    console.log(error.response.data);
+                    console.log(error.response.status);
+                    console.log(error.response.headers);
+                } else if (error.request) {
+                    console.log(error.request);
+                } else {
+                    console.log('Error', error.message);
                 }
-            ]
-        },
-    ];
-    const campaigns = [
-        {
-            campaign_id: 1,
-            company_id: 1,
-            product_id: 1,
-            campaign_name: "Gates for everyone",
-            keywords: [
-                "one for each",
-                "limited offer"
-            ],
-            bid_amount: 25000,
-            status: true,
-            town: "Tarnow",
-            radius: "10"
-        },
-        {
-            campaign_id: 2,
-            company_id: 1,
-            product_id: 3,
-            campaign_name: "Get them while they last",
-            keywords: [
-                "rare",
-                "one for each",
-                "limited offer"
-            ],
-            bid_amount: 25000,
-            status: false,
-            town: "Tarnow",
-            radius: "10"
-        },
-        {
-            campaign_id: 3,
-            company_id: 3,
-            product_id: 1,
-            campaign_name: "Let the shine power your ship",
-            keywords: [
-                "electricity",
-                "green technology",
-            ],
-            bid_amount: 25000,
-            status: true,
-            town: "Tarnow",
-            radius: "10"
-        }
-    ];
+                console.log(error.config);
+            })
+    }
+
 </script>
 
 <template>
@@ -127,6 +107,7 @@ import AddCampaignItem from "./AddCampaignItem.vue";
                     v-if="companyStore.companyId === campaign.company_id && productStore.productId === campaign.product_id"
                     v-bind:key="campaign.campaign_id"
                     :id="campaign.campaign_id"
+                    :campaign-id="campaign.campaign_id"
                     >
                     <template #name>
                         {{campaign.campaign_name}}

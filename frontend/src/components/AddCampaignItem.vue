@@ -6,7 +6,7 @@
     <div class="content">
         <div class="item">
             <div class="details">
-                <RouterLink to="/about"><button>Add Campaign</button></RouterLink>
+                <RouterLink to="/campaign"><button>Add Campaign</button></RouterLink>
             </div>
         </div>
     </div>
