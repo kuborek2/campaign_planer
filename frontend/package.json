@@ -8,8 +8,11 @@
     "test:unit": "vitest --environment jsdom"
   },
   "dependencies": {
+    "@carbon/icons-vue": "^10.49.1",
+    "axios": "^0.27.2",
     "pinia": "^2.0.16",
     "vue": "^3.2.37",
+    "vue-axios": "^3.4.1",
     "vue-router": "^4.1.2"
   },
   "devDependencies": {
@@ -17,6 +20,8 @@
     "@vitejs/plugin-vue-jsx": "^2.0.0",
     "@vue/test-utils": "^2.0.2",
     "jsdom": "^20.0.0",
+    "sass": "^1.53.0",
+    "sass-loader": "^13.0.2",
     "vite": "^3.0.1",
     "vitest": "^0.18.1",
     "vue": "^3.2.37"
