@@ -2,63 +2,11 @@
     import CompanyItem from "./CompanyItem.vue";
     import ProductItem from "./ProductItem.vue";
     import CampaignItem from "./CampaignItem.vue";
-    import { reactive, computed } from "vue";
     import { useCurrentCompanyStore } from "../stores/currentCompanyStore.js"
     import { useCurrentProductStore } from "../stores/currentProductStore.js"
+import AddCampaignItem from "./AddCampaignItem.vue";
     const companyStore = useCurrentCompanyStore();
     const productStore = useCurrentProductStore();
-    const data = reactive({
-        campaigns: [
-            {
-                campaign_id: 1,
-                company_id: 1,
-                product_id: 1,
-                campaign_name: "Gates for everyone",
-                keywords: [
-                    "one for each",
-                    "limited offer"
-                ],
-                bid_amount: 25000,
-                status: true,
-                town: "Tarnow",
-                radius: "10"
-            },
-            {
-                campaign_id: 2,
-                company_id: 1,
-                product_id: 3,
-                campaign_name: "Get them while they last",
-                keywords: [
-                    "rare",
-                    "one for each",
-                    "limited offer"
-                ],
-                bid_amount: 25000,
-                status: false,
-                town: "Tarnow",
-                radius: "10"
-            },
-            {
-                campaign_id: 3,
-                company_id: 3,
-                product_id: 1,
-                campaign_name: "Let the shine power your ship",
-                keywords: [
-                    "electricity",
-                    "green technology",
-                ],
-                bid_amount: 25000,
-                status: true,
-                town: "Tarnow",
-                radius: "10"
-            }
-        ]
-    });
-
-    const computedCampaigns = computed(() => {
-        return data.campaigns.company_id === companyStore.companyId
-            && data.campaigns.product_id === productStore.productId > 0 ? true : false
-    })
     const companies = 
     [
         {
@@ -100,6 +48,51 @@
             ]
         },
     ];
+    const campaigns = [
+        {
+            campaign_id: 1,
+            company_id: 1,
+            product_id: 1,
+            campaign_name: "Gates for everyone",
+            keywords: [
+                "one for each",
+                "limited offer"
+            ],
+            bid_amount: 25000,
+            status: true,
+            town: "Tarnow",
+            radius: "10"
+        },
+        {
+            campaign_id: 2,
+            company_id: 1,
+            product_id: 3,
+            campaign_name: "Get them while they last",
+            keywords: [
+                "rare",
+                "one for each",
+                "limited offer"
+            ],
+            bid_amount: 25000,
+            status: false,
+            town: "Tarnow",
+            radius: "10"
+        },
+        {
+            campaign_id: 3,
+            company_id: 3,
+            product_id: 1,
+            campaign_name: "Let the shine power your ship",
+            keywords: [
+                "electricity",
+                "green technology",
+            ],
+            bid_amount: 25000,
+            status: true,
+            town: "Tarnow",
+            radius: "10"
+        }
+    ];
 </script>
 
 <template>
@@ -121,8 +114,7 @@
                     v-bind:key="product.product_id" 
                     :id="company.company_id" 
                     v-if="companyStore.companyId === company.company_id"
-                    :product-id="product.product_id"
-                    >
+                    :product-id="product.product_id">
                     <template #name>
                         {{ product.name }}
                     </template>
@@ -130,16 +122,18 @@
             </template>
         </div>
         <div class="campaigns">
-            <CampaignItem 
-                v-for="campaign in computedCampaigns"
-                v-bind:key="campaign.campaign_id"
-                :id="campaign.campaign_id"
-
-                >
-                <template #name>
-                    {{campaign.campaign_name}}
-                </template>
-            </CampaignItem>
+            <template v-for="campaign in campaigns">
+                <CampaignItem 
+                    v-if="companyStore.companyId === campaign.company_id && productStore.productId === campaign.product_id"
+                    v-bind:key="campaign.campaign_id"
+                    :id="campaign.campaign_id"
+                    >
+                    <template #name>
+                        {{campaign.campaign_name}}
+                    </template>
+                </CampaignItem>
+            </template>
+            <AddCampaignItem/>
         </div>
     </div>
 </template>

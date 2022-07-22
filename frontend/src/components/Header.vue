@@ -49,6 +49,16 @@ import { RouterLink } from 'vue-router'
     font-size: 50px;
 }
 
+a {
+    font-style: none;
+    color: black;
+}
+
+a:hover {
+    background-color: #E0E0E0;
+    color: white;
+}
+
 
 
 </style>

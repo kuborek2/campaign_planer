@@ -5,11 +5,8 @@
 <template>
     <div class="content">
         <div class="item">
-            <h2>
-                <slot name="name"></slot>
-            </h2>
             <div class="details">
-                <button>About</button>
+                <RouterLink to="/about"><button>Add Campaign</button></RouterLink>
             </div>
         </div>
     </div>
@@ -25,11 +22,21 @@
     height: 75px;
     margin: 10px 25px 10px 25px;
     display: flex;
-    flex-direction: column;
     align-items: center;
+    justify-content: center;
     padding: 5px;
-    border: 1px solid #E0E0E0;
-    background-color: #7FD1AE;
 }
 
+button {
+    border: none;
+    width: 150px;
+    height: 50px;
+    background-color: #E0E0E0;
+    color: black;
+}
+
+a:hover > button {
+    background-color: #E0E0E0;
+    color: white;
+}
 </style>
