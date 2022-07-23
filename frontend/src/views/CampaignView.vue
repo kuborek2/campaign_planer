@@ -23,12 +23,12 @@ import CampaignModifyBox from '../components/CampaignModifyBox.vue'
 <template>
     <div class="container">
         <div class="infoBox" :class="{ blur: !checkLeftPanel}"></div>
-        <div class="infoBox boxArea">
+        <div class="infoBox" :class="{boxArea: !checkLeftPanel}">
             <CampaignInfoBox>
             </CampaignInfoBox>
         </div>
         <div class="modifyBox" :class="{ blur: !checkRightPanel}"></div>
-        <div class="modifyBox boxArea">
+        <div class="modifyBox" :class="{boxArea: !checkRightPanel}">
             <CampaignModifyBox>
             </CampaignModifyBox>
         </div>
