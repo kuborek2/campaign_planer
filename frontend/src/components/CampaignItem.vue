@@ -1,11 +1,13 @@
 <script setup>
     import ArrowIcon from '@carbon/icons-vue/es/arrow--right/32.js'
     import { useCurrentCampaignStore } from "../stores/currentCampaignStore.js"
+    import { useActionStore } from "../stores/currentActionStore.js"
     import { useCampaignsStore } from "../stores/campaignsStore.js"
     import router from '@/router'
 
     const campaignStore = useCurrentCampaignStore();
     const campaignsStore = useCampaignsStore();
+    const actionStore = useActionStore();
 
     defineProps({
         campaignId: {
@@ -15,6 +17,7 @@
     })
 
     const moveToCampaignDetails = (value) => {
+        actionStore.change("GET_INFO");
         campaignStore.change(value)
         router.push({ path: '/campaign' })
     }

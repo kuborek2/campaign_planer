@@ -57,8 +57,7 @@
             <div>
                 <h4>Tags: </h4>
                 <ul>
-                    <li>cos</li>
-                    <li>tak</li>
+                    <li v-for="tag in currnetCampaignData.keywords">#{{tag}}</li>
                 </ul>
             </div>
             <div>
