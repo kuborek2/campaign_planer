@@ -1,12 +1,18 @@
 <script setup>
-    import ArrowIcon from '@carbon/icons-vue/es/arrow--right/32.js'
+    import { useActionStore } from "../stores/currentActionStore.js"
+
+    const actionStore = useActionStore();
+
+    const changeAction = () => {
+        actionStore.change("ADD_ITEM");
+    }
 </script>
 
 <template>
     <div class="content">
         <div class="item">
             <div class="details">
-                <RouterLink to="/campaign"><button>Add Campaign</button></RouterLink>
+                <RouterLink to="/campaign" @click="changeAction"><button>Add Campaign</button></RouterLink>
             </div>
         </div>
     </div>

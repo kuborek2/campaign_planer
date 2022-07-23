@@ -9,23 +9,26 @@
 import CampaignModifyBox from '../components/CampaignModifyBox.vue'
 
     const actionStore = useActionStore();
-    const currentAction = storeToRefs(actionStore)
-
-    const campaignId = ref(-1)
 
     const checkLeftPanel = computed(() => {
-        return currentAction === "ADD_ITEM" 
+        return actionStore.action !== "ADD_ITEM"
     })
+
+    const checkRightPanel = computed(() => {
+        return actionStore.action === "ADD_ITEM" || actionStore.action === "PUT_ITEM"
+    })
+
 </script>
 
 <template>
     <div class="container">
-        <div class="infoBox" :class="{ blur: checkLeftPanel}"></div>
-        <div class="infoBox infoBoxTextArea">
+        <div class="infoBox" :class="{ blur: !checkLeftPanel}"></div>
+        <div class="infoBox boxArea">
             <CampaignInfoBox>
             </CampaignInfoBox>
         </div>
-        <div class="modifyBox">
+        <div class="modifyBox" :class="{ blur: !checkRightPanel}"></div>
+        <div class="modifyBox boxArea">
             <CampaignModifyBox>
             </CampaignModifyBox>
         </div>
@@ -49,7 +52,7 @@ import CampaignModifyBox from '../components/CampaignModifyBox.vue'
     height: 80%;
 }
 
-.infoBoxTextArea {
+.boxArea {
     z-index: -1;
 }
 
