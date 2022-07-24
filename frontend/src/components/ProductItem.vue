@@ -1,21 +1,33 @@
 <script setup>
     import ArrowIcon from '@carbon/icons-vue/es/arrow--right/32.js'
     import { useCurrentProductStore } from "../stores/currentProductStore.js"
+    import { ref } from 'vue';
+
     const productStore = useCurrentProductStore();
-        defineProps({
-        productId: Number
+
+    const props = defineProps(['productId'])
+
+    const highlightRef = ref(false);
+
+    productStore.$subscribe((mutation, state) => {
+        if( state.productId === props.productId ){
+            highlightRef.value = true
+        } else {
+            highlightRef.value = false
+        }
     })
+    
 </script>
 
 <template>
     <div class="content">
-        <div class="item">
+        <div class="item" :class="{highlight: highlightRef}">
             <h2>
                 <slot name="name"></slot>
             </h2>
         </div>
         <div class="button">
-            <ArrowIcon @click="productStore.change(productId)" class="icon"/>
+            <ArrowIcon @click="productStore.change(props.productId)" class="icon"/>
         </div>
     </div>
 </template>
@@ -47,6 +59,10 @@
     align-items: center;
     background: rgb(127,209,174);
     background: linear-gradient(90deg, rgba(127,209,174,1) 35%, rgba(255,255,255,1) 100%);
+}
+
+.highlight {
+    background-color: #7DC9FD;
 }
 
 </style>

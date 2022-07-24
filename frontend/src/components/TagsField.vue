@@ -9,8 +9,8 @@
     <!-- <input v-model="tagValue" @keyup.enter="addTag"> -->
     <SimpleTypeahead
         placeholder="Start writing..."
-        :items="['One','Two','Three']"
-        :minInputLength="1"
+        :items="tagsStore.predefinedTags"
+        :minInputLength="0"
         ref="tagValue"
         @selectItem="addTag"
     >
@@ -29,11 +29,13 @@
     const tags = ref([])
     const tagsStore = useTagsStore();
 
-    const addTag = () => {
-        if(!tagValue.value.input == '')
+    const addTag = (item) => {
+      if(!tagValue.value.input == '')
+      if( tagsStore.predefinedTags.includes(item) ){
         tags.value.push(tagValue.value.input);
         tagsStore.change(tags.value);
         tagValue.value.input = '';
+      }
     }
 
     const removeTag = (index) => {

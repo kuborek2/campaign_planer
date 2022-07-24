@@ -2,29 +2,27 @@
     import ArrowIcon from '@carbon/icons-vue/es/arrow--right/32.js'
     import { useCurrentCompanyStore } from "../stores/currentCompanyStore.js"
     import { storeToRefs } from "pinia";
-    import { ref } from 'vue';
+    import { ref, computed } from 'vue';
 
     const companyStore = useCurrentCompanyStore();
-    const { comapnyIdFromStore } = storeToRefs(companyStore);
 
-    defineProps({
-        companyId: {
-            type: Number,
-            default: -1
+    const props = defineProps(['companyId'])
+
+    const highlightRef = ref(false);
+
+    companyStore.$subscribe((mutation, state) => {
+        if( state.companyId === props.companyId ){
+            highlightRef.value = true
+        } else {
+            highlightRef.value = false
         }
     })
-
-    // const { buttonBackgroundColor } = ref(
-    //     companyId === comapnyIdFromStore ?
-    //     "background: rgb(217,243,255)" :
-    //     "background: rgb(127,209,174)"
-    //     )
 
 </script>
 
 <template>
     <div class="content">
-        <div class="item">
+        <div class="item" :class="{highlight: highlightRef}">
             <h2>
                 <slot name="name"></slot>
             </h2>
@@ -35,7 +33,7 @@
             </div>
         </div>
         <div class="button">
-            <ArrowIcon @click="companyStore.change(companyId)"/>
+            <ArrowIcon @click="companyStore.change(props.companyId)"/>
         </div>
     </div>
 </template>
@@ -68,16 +66,8 @@
     background: linear-gradient(90deg, rgba(127,209,174,1) 35%, rgba(255,255,255,1) 100%);
 }
 
-.button_highlight {
-    width: calc(25% - 25px);
-    height: 75px;
-    margin: 10px 25px 10px 0px;
-    border: 1px solid black;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: rgb(217,243,255);
-    /* background: linear-gradient(90deg, rgba(217,243,255,1) 35%, rgba(255,255,255,1) 100%); */
+.highlight {
+    background-color: #7DC9FD;
 }
 
 </style>
