@@ -1,4 +1,4 @@
-const campaigns = [
+let campaigns = [
     {
         campaign_id: 1,
         company_id: 1,

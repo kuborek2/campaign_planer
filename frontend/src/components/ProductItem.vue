@@ -1,7 +1,7 @@
 <script setup>
     import ArrowIcon from '@carbon/icons-vue/es/arrow--right/32.js'
     import { useCurrentProductStore } from "../stores/currentProductStore.js"
-    import { ref } from 'vue';
+    import { ref, onUpdated } from 'vue';
 
     const productStore = useCurrentProductStore();
 
@@ -11,6 +11,14 @@
 
     productStore.$subscribe((mutation, state) => {
         if( state.productId === props.productId ){
+            highlightRef.value = true
+        } else {
+            highlightRef.value = false
+        }
+    })
+
+    onUpdated(() => {
+        if( productStore.productId === props.productId ){
             highlightRef.value = true
         } else {
             highlightRef.value = false

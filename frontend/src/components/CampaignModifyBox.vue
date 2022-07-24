@@ -67,17 +67,34 @@
     }
 
     const collectFormData = () => {
+        let input;
         let result = formValidation()
         if ( result.status ){
             if( actionStore.action === "ADD_ITEM" ){
-                addCampaignItemRequest(result.data);
+                input = addCampaignItemRequest(result.data);
             } else if ( actionStore.action === "PUT_ITEM" ){
-                upadteCampaignItemRequest(result.data);
-                campaignsStore.loadDataFromBackend();
-                setTimeout(5000);
-                router.push({ path: '/' });
+                input = upadteCampaignItemRequest(result.data);
             }
         }
+        console.log(input)
+        if ( input.suc )
+            updateCampignStore( input.campaign )
+    }
+
+    const updateCampignStore = ( campaign ) => {
+        if( actionStore.action === "ADD_ITEM" ){
+            campaignsStore.pushItem(campaign);
+        } else if ( actionStore.action === "PUT_ITEM" ){
+            campaignsStore.swapItem(findIndexOfCampaignByCampaignId(currentCampaignStore.campaignId), campaign);
+        }
+    }
+
+    const findIndexOfCampaignByCampaignId = (id) => {
+        let item = campaignsStore.campaigns.filter((obj) => {
+            return obj.campaign_id === currentCampaignStore.campaignId;
+        })
+
+        return campaignsStore.campaigns.indexOf(item[0]);
     }
 
     const clearForm = () => {
@@ -147,6 +164,8 @@
     }
 
     const upadteCampaignItemRequest = ( data ) => {
+        let success = false;
+        let output = {};
         const objToSend = {
             "company_id": data.company_id,
             "product_id": data.product_id,
@@ -164,6 +183,8 @@
                 if( response.status === 200){
                     clearForm();
                     outputMessage.value = "item succefully modified"
+                    output.campaign = response.data.campaign;
+                    success = true;
                 } else if ( response.status === 404 ){
                     outputMessage.value = "Something went wrong!!!"
                 }
@@ -180,9 +201,13 @@
                 }
                 console.log(error.config);
             });
+        output.suc = success;
+        return output
     }
 
     const addCampaignItemRequest = ( data ) => {
+        let success = false;
+        let output = {};
         const objToSend = {
             "company_id": data.company_id,
             "product_id": data.product_id,
@@ -199,9 +224,11 @@
                 if( response.status === 200){
                     clearForm();
                     outputMessage.value = "item succefully added"
+                    output.campaign = response.data.campaign;
+                    success = true;
                 } else if (response.status === 404) {
                     outputMessage.value = "Something went wrong!!!"
-                }
+                } 
             })
             .catch(function (error) {
                 if (error.response) {
@@ -215,6 +242,8 @@
                 }
                 console.log(error.config);
             });
+        output.suc = success;
+        return output
     }
 
 </script>

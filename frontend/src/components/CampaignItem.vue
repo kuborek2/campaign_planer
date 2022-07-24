@@ -9,12 +9,7 @@
     const campaignsStore = useCampaignsStore();
     const actionStore = useActionStore();
 
-    defineProps({
-        campaignId: {
-            type: Number,
-            default: -1
-        }
-    })
+    const props = defineProps(['campaignId'])
 
     const moveToCampaignDetails = (value) => {
         actionStore.change("GET_INFO");
@@ -30,7 +25,7 @@
                 <slot name="name"></slot>
             </h2>
             <div class="details">
-                <button @click="moveToCampaignDetails(campaignId)">About</button>
+                <button @click="moveToCampaignDetails(parseInt(props.campaignId))">About</button>
             </div>
         </div>
     </div>

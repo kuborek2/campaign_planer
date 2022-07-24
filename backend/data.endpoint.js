@@ -11,6 +11,16 @@ let removeCampaign = (arr, id) => {
     });
 }
 
+const findCampaignId = (id) => {
+    const item = campaigns.filter((obj) => {
+        return obj.campaign_id === parseInt(id);
+    })
+    console.log("lista: ", campaigns,"id: ", id ,"item: ", item, "cos: ", campaigns.indexOf(item[0]))
+    if( item.length < 1 )
+        return { status: false }
+    return { status: true, indeks: campaigns.indexOf(item[0]) }
+}
+
 let checkMandatoryCampaignParams = (obj) => {
     let mandatoryParams = {
         company_id: false,
@@ -119,9 +129,9 @@ module.exports = function (){
         router.delete('/api/campaigns/:id', (req, res) => {
             const campaign_id = parseInt(req.params.id);
             const campaign_object = campaigns.find(element => element.campaign_id === campaign_id)
-            if( 
-                !isNaN(campaign_id) &&
-                campaign_object !== undefined 
+            console.log(campaign_id, campaign_object)
+            if( !isNaN(campaign_id) &&
+                !!campaign_object
                 ){
                 campaigns = removeCampaign(campaigns, campaign_id);
                 console.log("deleted campaign with id: "+campaign_id);
@@ -133,12 +143,17 @@ module.exports = function (){
         //** Endpoint for PUT request for campaigns */
         router.put('/api/campaign/:id', async (request, response, next) => {
             let newCampaign = request.body;
-            console.log(newCampaign, request.params.id)
+            console.log(newCampaign)
             if( checkMandatoryCampaignParams(newCampaign) ){
-                newCampaign["campaign_id"] = request.params.id;
-                campaigns[request.params.id-1] = newCampaign;
-                console.log("Campaign modified with campaign_id: "+newCampaign.campaign_id);
-                response.status(200).send({campaign: newCampaign});
+                const output = findCampaignId(request.params.id);
+                if (  output.status ){
+                    newCampaign["campaign_id"] = parseInt(request.params.id);
+                    campaigns[output.indeks] = newCampaign;
+                    console.log("Campaign modified with campaign_id: "+newCampaign.campaign_id);
+                    response.status(200).send({campaign: newCampaign});
+                } else {
+                    response.status(404).send("Item not found");
+                }
             } else {
                 response.status(404).send("Data was incorrect");
             }

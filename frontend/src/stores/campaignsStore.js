@@ -11,6 +11,17 @@ export const useCampaignsStore = defineStore({
     change(newCampaigns) {
       this.campaigns = newCampaigns;
     },
+    pushItem(item){
+      this.campaigns.push(item);
+    },
+    swapItem(index, item){
+      this.campaigns[index] = item;
+    },
+    deleteItem(campaign_id){
+      this.campaigns = arr.filter((ele) => { 
+        return ele.campaign_id !== campaign_id; 
+    });
+    },
     loadDataFromBackend(){
       axios
         .get(apiGetCampaigns)
