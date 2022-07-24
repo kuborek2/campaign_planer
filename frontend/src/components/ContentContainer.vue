@@ -8,7 +8,7 @@
     import { useCompaniesStore } from "../stores/companiesStore.js"
     import { useCampaignsStore } from "../stores/campaignsStore.js"
     import AddCampaignItem from "./AddCampaignItem.vue";
-    import { inject, onMounted } from 'vue'
+    import { inject, onMounted, reactive } from 'vue'
     import axios from 'axios'
 
     // Stores
@@ -16,8 +16,6 @@
     const productStore = useCurrentProductStore();
     const companiesStore = useCompaniesStore();
     const campaignsStore = useCampaignsStore();
-    const apiGetCompanies = "http://localhost:3000/api/companies"
-    const apiGetCampaigns = "http://localhost:3000/api/campaigns"
     const { companies } = storeToRefs(companiesStore);
     const { campaigns } = storeToRefs(campaignsStore);
 
@@ -28,49 +26,11 @@
 
     //** Data requests */
     const requestCompanies = () => {
-        axios
-            .get(apiGetCompanies)
-            .then((response) => {
-                companiesStore.change(response.data.companies)
-            })
-            .catch(function (error) {
-                if (error.response) {
-                    // The request was made and the server responded with a status code
-                    // that falls out of the range of 2xx
-                    console.log(error.response.data);
-                    console.log(error.response.status);
-                    console.log(error.response.headers);
-                } else if (error.request) {
-                    // The request was made but no response was received
-                    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-                    // http.ClientRequest in node.js
-                    console.log(error.request);
-                } else {
-                    // Something happened in setting up the request that triggered an Error
-                    console.log('Error', error.message);
-                }
-                console.log(error.config);
-            })
+        companiesStore.loadDataFromBackend();
     }
 
     const requestCampaigns = () => {
-        axios
-            .get(apiGetCampaigns)
-            .then((response) => {
-                campaignsStore.change(response.data.campaigns)
-            })
-            .catch(function (error) {
-                if (error.response) {
-                    console.log(error.response.data);
-                    console.log(error.response.status);
-                    console.log(error.response.headers);
-                } else if (error.request) {
-                    console.log(error.request);
-                } else {
-                    console.log('Error', error.message);
-                }
-                console.log(error.config);
-            })
+        campaignsStore.loadDataFromBackend();
     }
 
 </script>
