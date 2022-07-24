@@ -16,7 +16,7 @@
     align-items: center;
     width: 100%;
     height: 100%;
-    max-height: 100px;
+    max-height: 50px;
     padding: 0 2vw;
     background-color: #E0E0E0;
 }

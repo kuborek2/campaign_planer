@@ -5,7 +5,7 @@
     import { useCurrentCampaignStore } from "../stores/currentCampaignStore.js"
     import { useCampaignsStore } from "../stores/campaignsStore.js"
     import { useCompaniesStore } from "../stores/companiesStore.js"
-    import { onMounted } from 'vue'
+    import { onMounted, onUpdated } from 'vue'
 
     const currentCampaignStore = useCurrentCampaignStore();
     const currentCompanyStore = useCurrentCompanyStore();
@@ -17,6 +17,10 @@
     let currnetProductData = ref("")
 
     onMounted(()  =>  {
+        loadCurrentData();
+    })
+
+    onUpdated(() => {
         loadCurrentData();
     })
     

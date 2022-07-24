@@ -1,10 +1,12 @@
 <script setup>
     import ArrowIcon from '@carbon/icons-vue/es/arrow--right/32.js'
     import { useCurrentCompanyStore } from "../stores/currentCompanyStore.js"
+    import { useCurrentProductStore } from "../stores/currentProductStore.js"
     import { storeToRefs } from "pinia";
-    import { ref, computed } from 'vue';
+    import { ref, computed, onUpdated } from 'vue';
 
     const companyStore = useCurrentCompanyStore();
+    const productStore = useCurrentProductStore();
 
     const props = defineProps(['companyId'])
 
@@ -17,6 +19,19 @@
             highlightRef.value = false
         }
     })
+
+    onUpdated(() => {
+        if( companyStore.companyId === props.companyId ){
+            highlightRef.value = true
+        } else {
+            highlightRef.value = false
+        }
+    })
+
+    const buttonClicked = () => {
+        companyStore.change(props.companyId)
+        productStore.change(-1)
+    }
 
 </script>
 
@@ -33,7 +48,7 @@
             </div>
         </div>
         <div class="button">
-            <ArrowIcon @click="companyStore.change(props.companyId)"/>
+            <ArrowIcon @click="buttonClicked"/>
         </div>
     </div>
 </template>

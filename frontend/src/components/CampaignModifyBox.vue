@@ -76,6 +76,7 @@
                 input = upadteCampaignItemRequest(result.data);
             }
         }
+        console.log(input)
         if ( input.suc )
             updateCampignStore( input.campaign )
     }
@@ -84,8 +85,16 @@
         if( actionStore.action === "ADD_ITEM" ){
             campaignsStore.pushItem(campaign);
         } else if ( actionStore.action === "PUT_ITEM" ){
-
+            campaignsStore.swapItem(findIndexOfCampaignByCampaignId(currentCampaignStore.campaignId), campaign);
         }
+    }
+
+    const findIndexOfCampaignByCampaignId = (id) => {
+        let item = campaignsStore.campaigns.filter((obj) => {
+            return obj.campaign_id === currentCampaignStore.campaignId;
+        })
+
+        return campaignsStore.campaigns.indexOf(item[0]);
     }
 
     const clearForm = () => {
@@ -155,7 +164,7 @@
     }
 
     const upadteCampaignItemRequest = ( data ) => {
-        let succes = false;
+        let success = false;
         let output = {};
         const objToSend = {
             "company_id": data.company_id,
@@ -175,7 +184,7 @@
                     clearForm();
                     outputMessage.value = "item succefully modified"
                     output.campaign = response.data.campaign;
-                    succes = true;
+                    success = true;
                 } else if ( response.status === 404 ){
                     outputMessage.value = "Something went wrong!!!"
                 }
@@ -192,12 +201,12 @@
                 }
                 console.log(error.config);
             });
-        output.suc = succes;
+        output.suc = success;
         return output
     }
 
     const addCampaignItemRequest = ( data ) => {
-        let succes = false;
+        let success = false;
         let output = {};
         const objToSend = {
             "company_id": data.company_id,
@@ -216,7 +225,7 @@
                     clearForm();
                     outputMessage.value = "item succefully added"
                     output.campaign = response.data.campaign;
-                    succes = true;
+                    success = true;
                 } else if (response.status === 404) {
                     outputMessage.value = "Something went wrong!!!"
                 } 
@@ -233,7 +242,7 @@
                 }
                 console.log(error.config);
             });
-        output.suc = succes;
+        output.suc = success;
         return output
     }
 

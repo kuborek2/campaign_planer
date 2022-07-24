@@ -1,5 +1,5 @@
 <script setup>
-    import { reactive, ref, defineProps, computed } from 'vue';
+    import { reactive, ref, defineProps, computed, onUpdated } from 'vue';
     import CampaignInfoBox from '../components/CampaignInfoBox.vue';
     import { useCurrentCampaignStore } from "../stores/currentCampaignStore.js"
     import { useActionStore } from "../stores/currentActionStore.js"
@@ -12,6 +12,7 @@
     const actionStore = useActionStore();
     const currentCampaignStore = useCurrentCampaignStore();
     const apiDeleteCampaignLink = "http://localhost:3000/api/campaigns/"
+    const outputMessage = ref('')
 
     const checkLeftPanel = computed(() => {
         return actionStore.action !== "ADD_ITEM"
@@ -25,9 +26,21 @@
         actionStore.change("PUT_ITEM");
     }
 
+    onUpdated(() => {
+        outputMessage.value = ""
+    })
+
     const DeleteCampaign = () => {
+        let status = false
         axios.delete(apiDeleteCampaignLink+currentCampaignStore.campaignId)
-            .then((response) => console.log(response.status))
+            .then((response) => {
+                if( response.status ){
+                    campaignsStore.loadDataFromBackend();
+                    router.push({ path: '/' });
+                } else {
+                    alert("Unable to delete the item");
+                }
+            })
             .catch(function (error) {
                 if (error.response) {
                     console.log(error.response.data);
@@ -40,8 +53,6 @@
                 }
                 console.log(error.config);
             });
-        campaignsStore.loadDataFromBackend();
-        router.push({ path: '/' });
     }
 
 </script>
@@ -64,6 +75,7 @@
             </CampaignModifyBox>
         </div>
     </div>
+    <p>{{outputMessage}}</p>
 </template>
 
 <style scoped>
