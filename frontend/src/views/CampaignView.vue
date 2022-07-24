@@ -22,7 +22,7 @@
     })
 
     const ModifyCampaign = () => {
-
+        actionStore.change("PUT_ITEM");
     }
 
     const DeleteCampaign = () => {

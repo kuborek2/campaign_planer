@@ -133,6 +133,7 @@ module.exports = function (){
         //** Endpoint for PUT request for campaigns */
         router.put('/api/campaign/:id', async (request, response, next) => {
             let newCampaign = request.body;
+            console.log(newCampaign, request.params.id)
             if( checkMandatoryCampaignParams(newCampaign) ){
                 newCampaign["campaign_id"] = request.params.id;
                 campaigns[request.params.id-1] = newCampaign;

@@ -1,5 +1,6 @@
 <script setup>
     import { ref, computed } from 'vue';
+    import { storeToRefs } from 'pinia';
     import { useCurrentCompanyStore } from "../stores/currentCompanyStore.js"
     import { useCurrentProductStore } from "../stores/currentProductStore.js"
     import { useCurrentCampaignStore } from "../stores/currentCampaignStore.js"
@@ -7,11 +8,13 @@
     import { useCompaniesStore } from "../stores/companiesStore.js"
     import { useTownsStore } from "../stores/townsStore.js"
     import { useTagsStore } from "../stores/tagsStore.js"
-    import { onMounted } from 'vue'
+    import { onMounted, watch } from 'vue'
     import TagsField from './TagsField.vue';
     import Toggle from '@vueform/toggle'
     import "@vueform/toggle/themes/default.css";
     import axios from 'axios'
+    import { useActionStore } from "../stores/currentActionStore.js"
+    import router from '@/router'
 
     const currentCampaignStore = useCurrentCampaignStore();
     const currentCompanyStore = useCurrentCompanyStore();
@@ -23,6 +26,7 @@
     let currnetCampaignData = ref({});
     let currnetCompanyData = ref({});
     let currnetProductData = ref("");
+    const actionStore = useActionStore();
 
     const apiPostCampaignLink = "http://localhost:3000/api/campaign";
 
@@ -64,8 +68,16 @@
 
     const collectFormData = () => {
         let result = formValidation()
-        if ( result.status )
-            addCampaignItemRequest(result.data);
+        if ( result.status ){
+            if( actionStore.action === "ADD_ITEM" ){
+                addCampaignItemRequest(result.data);
+            } else if ( actionStore.action === "PUT_ITEM" ){
+                upadteCampaignItemRequest(result.data);
+                campaignsStore.loadDataFromBackend();
+                setTimeout(5000);
+                router.push({ path: '/' });
+            }
+        }
     }
 
     const clearForm = () => {
@@ -122,7 +134,6 @@
             outputMessage.value = "Enter valid company name"
             return { status: false }
         }
-        console.log("campaign name: ", !!campaign_name.value , !!town.value , radius.value > 0 , tagsStore.tags.length > 0 )
         if( !!campaign_name.value && !!town.value && radius.value > 0 && tagsStore.tags.length > 0 ){
             outputMessage.value = ""
             return { 
@@ -133,6 +144,42 @@
             outputMessage.value = "All data is mandatory including tags"
             return { status: false }
         }
+    }
+
+    const upadteCampaignItemRequest = ( data ) => {
+        const objToSend = {
+            "company_id": data.company_id,
+            "product_id": data.product_id,
+            "campaign_name": campaign_name.value,
+            "keywords": tagsStore.tags,
+            "bid_amount": bid_amount.value,
+            "status": isStatusActive.value,
+            "town": town.value,
+            "radius": radius.value
+        }
+
+        console.log(objToSend)
+        axios.put(apiPostCampaignLink+"/"+currentCampaignStore.campaignId, objToSend)
+            .then((response) => {
+                if( response.status === 200){
+                    clearForm();
+                    outputMessage.value = "item succefully modified"
+                } else if ( response.status === 404 ){
+                    outputMessage.value = "Something went wrong!!!"
+                }
+            })
+            .catch(function (error) {
+                if (error.response) {
+                    console.log(error.response.data);
+                    console.log(error.response.status);
+                    console.log(error.response.headers);
+                } else if (error.request) {
+                    console.log(error.request);
+                } else {
+                    console.log('Error', error.message);
+                }
+                console.log(error.config);
+            });
     }
 
     const addCampaignItemRequest = ( data ) => {
@@ -151,7 +198,9 @@
             .then((response) => {
                 if( response.status === 200){
                     clearForm();
-                    outputMessage.value = "Udalo sie dodac element"
+                    outputMessage.value = "item succefully added"
+                } else if (response.status === 404) {
+                    outputMessage.value = "Something went wrong!!!"
                 }
             })
             .catch(function (error) {
