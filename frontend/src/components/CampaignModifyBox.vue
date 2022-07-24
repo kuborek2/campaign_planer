@@ -67,16 +67,24 @@
     }
 
     const collectFormData = () => {
+        let input;
         let result = formValidation()
         if ( result.status ){
             if( actionStore.action === "ADD_ITEM" ){
-                addCampaignItemRequest(result.data);
+                input = addCampaignItemRequest(result.data);
             } else if ( actionStore.action === "PUT_ITEM" ){
-                upadteCampaignItemRequest(result.data);
-                campaignsStore.loadDataFromBackend();
-                setTimeout(5000);
-                router.push({ path: '/' });
+                input = upadteCampaignItemRequest(result.data);
             }
+        }
+        if ( input.suc )
+            updateCampignStore( input.campaign )
+    }
+
+    const updateCampignStore = ( campaign ) => {
+        if( actionStore.action === "ADD_ITEM" ){
+            campaignsStore.pushItem(campaign);
+        } else if ( actionStore.action === "PUT_ITEM" ){
+
         }
     }
 
@@ -147,6 +155,8 @@
     }
 
     const upadteCampaignItemRequest = ( data ) => {
+        let succes = false;
+        let output = {};
         const objToSend = {
             "company_id": data.company_id,
             "product_id": data.product_id,
@@ -164,6 +174,8 @@
                 if( response.status === 200){
                     clearForm();
                     outputMessage.value = "item succefully modified"
+                    output.campaign = response.data.campaign;
+                    succes = true;
                 } else if ( response.status === 404 ){
                     outputMessage.value = "Something went wrong!!!"
                 }
@@ -180,9 +192,13 @@
                 }
                 console.log(error.config);
             });
+        output.suc = succes;
+        return output
     }
 
     const addCampaignItemRequest = ( data ) => {
+        let succes = false;
+        let output = {};
         const objToSend = {
             "company_id": data.company_id,
             "product_id": data.product_id,
@@ -199,9 +215,11 @@
                 if( response.status === 200){
                     clearForm();
                     outputMessage.value = "item succefully added"
+                    output.campaign = response.data.campaign;
+                    succes = true;
                 } else if (response.status === 404) {
                     outputMessage.value = "Something went wrong!!!"
-                }
+                } 
             })
             .catch(function (error) {
                 if (error.response) {
@@ -215,6 +233,8 @@
                 }
                 console.log(error.config);
             });
+        output.suc = succes;
+        return output
     }
 
 </script>

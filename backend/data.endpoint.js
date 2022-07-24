@@ -11,6 +11,14 @@ let removeCampaign = (arr, id) => {
     });
 }
 
+const findCampaignId = (arr, id) => {
+    const item = arr.filer((obj) => {
+        return obj.campaign_id === id;
+    })
+
+    return arr.indexOf(item[0])
+}
+
 let checkMandatoryCampaignParams = (obj) => {
     let mandatoryParams = {
         company_id: false,
@@ -133,10 +141,9 @@ module.exports = function (){
         //** Endpoint for PUT request for campaigns */
         router.put('/api/campaign/:id', async (request, response, next) => {
             let newCampaign = request.body;
-            console.log(newCampaign, request.params.id)
             if( checkMandatoryCampaignParams(newCampaign) ){
                 newCampaign["campaign_id"] = request.params.id;
-                campaigns[request.params.id-1] = newCampaign;
+                campaigns[findCampaignId(request.params.id)] = newCampaign;
                 console.log("Campaign modified with campaign_id: "+newCampaign.campaign_id);
                 response.status(200).send({campaign: newCampaign});
             } else {

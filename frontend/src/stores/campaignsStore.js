@@ -11,6 +11,12 @@ export const useCampaignsStore = defineStore({
     change(newCampaigns) {
       this.campaigns = newCampaigns;
     },
+    pushItem(item){
+      this.campaigns.push(item);
+    },
+    swapItem(index, item){
+      this.campaigns[index] = item;
+    },
     loadDataFromBackend(){
       axios
         .get(apiGetCampaigns)
