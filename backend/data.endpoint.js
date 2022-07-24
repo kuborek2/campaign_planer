@@ -30,7 +30,7 @@ let checkMandatoryCampaignParams = (obj) => {
                     if ( objValue.length > 0 )
                         mandatoryParams.keywords = true 
                 } else if ( objKey === "bid_amount" ){
-                    if( objValue > 10000 )
+                    if( objValue > 1000 )
                         mandatoryParams.bid_amount = true
                 } else {
                     mandatoryParams[objKey] = true;

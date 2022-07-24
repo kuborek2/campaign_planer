@@ -6,7 +6,7 @@
     import { useCampaignsStore } from "../stores/campaignsStore.js"
     import { useActionStore } from "../stores/currentActionStore.js"
     import { inject, onMounted } from 'vue'
-import CampaignModifyBox from '../components/CampaignModifyBox.vue'
+    import CampaignModifyBox from '../components/CampaignModifyBox.vue'
 
     const actionStore = useActionStore();
 
