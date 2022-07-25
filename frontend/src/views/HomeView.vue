@@ -8,8 +8,8 @@
   const tagsStore = useTagsStore();
   const townsStore = useTownsStore();
 
-  const apiGetTags = "http://localhost:3000/api/tags"
-  const apiGetTowns = "http://localhost:3000/api/towns"
+  const apiGetTags = "http://nodejsserver-env.eba-cmwtbrg3.eu-central-1.elasticbeanstalk.com/api/tags"
+  const apiGetTowns = "http://nodejsserver-env.eba-cmwtbrg3.eu-central-1.elasticbeanstalk.com/api/towns"
 
   onMounted(() => {
     requestTags();

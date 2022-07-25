@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
-const apiGetCompanies = "http://localhost:3000/api/companies"
+const apiGetCompanies = "http://nodejsserver-env.eba-cmwtbrg3.eu-central-1.elasticbeanstalk.com/api/companies"
 
 export const useCompaniesStore = defineStore({
   id: 'comapnies',

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
-const apiGetCampaigns = "http://localhost:3000/api/campaigns"
+const apiGetCampaigns = "http://nodejsserver-env.eba-cmwtbrg3.eu-central-1.elasticbeanstalk.com/api/campaigns"
 
 export const useCampaignsStore = defineStore({
   id: 'campaigns',

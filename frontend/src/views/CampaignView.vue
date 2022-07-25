@@ -11,7 +11,7 @@
     const campaignsStore = useCampaignsStore();
     const actionStore = useActionStore();
     const currentCampaignStore = useCurrentCampaignStore();
-    const apiDeleteCampaignLink = "http://localhost:3000/api/campaigns/"
+    const apiDeleteCampaignLink = "http://nodejsserver-env.eba-cmwtbrg3.eu-central-1.elasticbeanstalk.com/api/campaigns/"
     const outputMessage = ref('')
 
     const checkLeftPanel = computed(() => {
