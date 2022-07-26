@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
-const apiGetCampaigns = "http://nodejsserver-env.eba-cmwtbrg3.eu-central-1.elasticbeanstalk.com/api/campaigns"
+const apiGetCampaigns = "https://nodejs-server-jk.herokuapp.com/api/campaigns"
 
 export const useCampaignsStore = defineStore({
   id: 'campaigns',

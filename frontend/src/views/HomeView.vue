@@ -8,8 +8,8 @@
   const tagsStore = useTagsStore();
   const townsStore = useTownsStore();
 
-  const apiGetTags = "http://nodejsserver-env.eba-cmwtbrg3.eu-central-1.elasticbeanstalk.com/api/tags"
-  const apiGetTowns = "http://nodejsserver-env.eba-cmwtbrg3.eu-central-1.elasticbeanstalk.com/api/towns"
+  const apiGetTags = "https://nodejs-server-jk.herokuapp.com/api/tags"
+  const apiGetTowns = "https://nodejs-server-jk.herokuapp.com/api/towns"
 
   onMounted(() => {
     requestTags();

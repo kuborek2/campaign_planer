@@ -28,7 +28,7 @@
     let currnetProductData = ref("");
     const actionStore = useActionStore();
 
-    const apiPostCampaignLink = "http://nodejsserver-env.eba-cmwtbrg3.eu-central-1.elasticbeanstalk.com/api/campaign";
+    const apiPostCampaignLink = "https://nodejs-server-jk.herokuapp.com/api/campaign";
 
     //form refs
     const campaign_name = ref('');
