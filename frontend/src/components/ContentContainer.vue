@@ -38,6 +38,7 @@
 <template>
     <div class="container">
         <div class="companies" >
+            <h1 class="list-title">Sellers list:</h1>
             <CompanyItem v-for="company in companies" v-bind:key="company.company_id" :company-id="company.company_id">
                 <template #name>
                     {{ company.name }}
@@ -48,6 +49,7 @@
             </CompanyItem>
         </div>
         <div class="products">
+            <h1 class="list-title">Products list:</h1>
             <template v-for="company in companies">
                 <ProductItem 
                     v-for="product in company.products_list" 
@@ -62,6 +64,7 @@
             </template>
         </div>
         <div class="campaigns">
+            <h1 class="list-title">Camapigns List list:</h1>
             <template v-for="campaign in campaigns">
                 <CampaignItem 
                     v-if="companyStore.companyId === campaign.company_id && productStore.productId === campaign.product_id"
@@ -103,5 +106,11 @@
 
 .campaigns {
     grid-area: campaigns;
+}
+
+.list-title{
+    display: block;
+    margin: auto;
+    width: fit-content;
 }
 </style>
